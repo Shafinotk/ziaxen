@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Agent Dashboard</title>
+</head>
+<body>
+  <h2>Driving Agent Prediction</h2>
+  <form id="inputForm">
+    <label>Throttle Position: <input type="number" step="any" name="Throttle_Position" required></label><br>
+    <label>Brake Pressure: <input type="number" step="any" name="Brake_Pressure" required></label><br>
+    <label>Steering Angle: <input type="number" step="any" name="Steering_Angle" required></label><br>
+    <label>Vehicle Speed: <input type="number" step="any" name="Vehicle_Speed" required></label><br>
+    <label>Gear Position: <input type="number" step="any" name="Gear_Position" required></label><br>
+    <label>Latitude: <input type="number" step="any" name="Latitude" required></label><br>
+    <label>Longitude: <input type="number" step="any" name="Longitude" required></label><br>
+    <label>Speed: <input type="number" step="any" name="Speed" required></label><br>
+    <label>Heading: <input type="number" step="any" name="Heading" required></label><br>
+    <label>Acceleration X: <input type="number" step="any" name="Acceleration_X" required></label><br>
+    <label>Acceleration Y: <input type="number" step="any" name="Acceleration_Y" required></label><br>
+    <label>Rotation X: <input type="number" step="any" name="Rotation_X" required></label><br>
+    <label>Rotation Y: <input type="number" step="any" name="Rotation_Y" required></label><br>
+    <label>Rotation Z: <input type="number" step="any" name="Rotation_Z" required></label><br>
+    <label>Position X: <input type="number" step="any" name="Position_X" required></label><br>
+    <label>Velocity X: <input type="number" step="any" name="Velocity_X" required></label><br>
+    <label>Velocity Y: <input type="number" step="any" name="Velocity_Y" required></label><br>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <h3>Prediction:</h3>
+  <p id="result"></p>
+
+  <script>
+    document.getElementById('inputForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const formData = new FormData(e.target);
+      const data = {};
+      for (const [key, value] of formData.entries()) {
+        data[key] = parseFloat(value);
+      }
+
+      const response = await fetch('http://127.0.0.1:8000/predict', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+      document.getElementById('result').innerText = JSON.stringify(result, null, 2);
+    });
+  </script>
+</body>
+</html>
